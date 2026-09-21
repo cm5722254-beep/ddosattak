@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ── Header ── */
+    .card-header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .card-header .logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e94560, #0f3460);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 26px;
+    }
+
+    .card-header h1 {
+      color: #ffffff;
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .card-header p {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.9rem;
+      margin-top: 6px;
+    }
+
+    /* ── Form Groups ── */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper .icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      pointer-events: none;
+      color: rgba(255,255,255,0.35);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 13px 44px 13px 42px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+    }
+
+    input::placeholder { color: rgba(255,255,255,0.25); }
+
+    input:focus {
+      border-color: #e94560;
+      background: rgba(255, 255, 255, 0.10);
+      box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.20);
+    }
+
+    /* ── Password toggle ── */
+    .toggle-pw {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: rgba(255,255,255,0.35);
+      transition: color 0.2s;
+      padding: 0;
+      line-height: 1;
+    }
+    .toggle-pw:hover { color: rgba(255,255,255,0.8); }
+
+    /* ── Strength Bar ── */
+    .strength-bar {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+    }
+    .strength-bar span {
+      flex: 1;
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255,255,255,0.12);
+      transition: background 0.3s;
+    }
+
+    .strength-label {
+      font-size: 0.75rem;
+      margin-top: 4px;
+      height: 14px;
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* ── Inline error ── */
+    .error-msg {
+      font-size: 0.78rem;
+      color: #ff6b81;
+      margin-top: 5px;
+      min-height: 16px;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+
+    /* ── Submit button ── */
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #e94560, #c0392b);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(233,69,96,0.4);
+    }
+    .btn-submit:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); opacity: 1; }
+
+    /* ── Footer link ── */
+    .footer-text {
+      text-align: center;
+      margin-top: 24px;
+      color: rgba(255,255,255,0.45);
+      font-size: 0.875rem;
+    }
+    .footer-text a {
+      color: #e94560;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .footer-text a:hover { text-decoration: underline; }
+
+    /* ── Success toast ── */
+    .toast {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #27ae60;
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-weight: 600;
+      box-shadow: 0 4px 20px rgba(39,174,96,0.4);
+      animation: slideUp 0.3s ease;
+      z-index: 999;
+    }
+    @keyframes slideUp {
+      from { bottom: 10px; opacity: 0; }
+      to   { bottom: 30px; opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-header">
+    <div class="logo">🚀</div>
+    <h1>Create Account</h1>
+    <p>Fill in the details below to get started</p>
+  </div>
+
+  <form id="registerForm" novalidate>
+
+    <!-- Username -->
+    <div class="form-group">
+      <label for="username">Username</label>
+      <div class="input-wrapper">
+        <span class="icon">👤</span>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="e.g. john_doe99"
+          autocomplete="username"
+          maxlength="30"
+          required
+        />
+      </div>
+      <div class="error-msg" id="usernameErr">Username must be 3–30 characters (letters, numbers, _ .).</div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Email</label>
+      <div class="input-wrapper">
+        <span class="icon">✉️</span>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        />
+      </div>
+      <div class="error-msg" id="emailErr">Please enter a valid email address.</div>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <label for="password">Password</label>
+      <div class="input-wrapper">
+        <span class="icon">🔒</span>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Min. 8 characters"
+          autocomplete="new-password"
+          required
+        />
+        <button type="button" class="toggle-pw" aria-label="Toggle password" data-target="password">👁️</button>
+      </div>
+      <div class="strength-bar">
+        <span id="s1"></span><span id="s2"></span>
+        <span id="s3"></span><span id="s4"></span>
+      </div>
+      <div class="strength-label" id="strengthLabel"></div>
+      <div class="error-msg" id="passwordErr">Password must be at least 8 characters.</div>
+    </div>
+
+    <!-- Confirm Password -->
+    <div class="form-group">
+      <label for="confirmPassword">Confirm Password</label>
+      <div class="input-wrapper">
+        <span class="icon">🔑</span>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          placeholder="Re-enter your password"
+          autocomplete="new-password"
+          required
+        />
+        <button type="button" class="toggle-pw" aria-label="Toggle confirm password" data-target="confirmPassword">👁️</button>
+      </div>
+      <div class="error-msg" id="confirmErr">Passwords do not match.</div>
+    </div>
+
+    <button type="submit" class="btn-submit">Create Account</button>
+  </form>
+
+  <p class="footer-text">Already have an account? <a href="#">Sign in</a></p>
+</div>
+
+<!-- Success Toast -->
+<div class="toast" id="toast">✅ Account created successfully!</div>
+
+<script>
+  /* ── Helpers ── */
+  const $ = id => document.getElementById(id);
+  const show = (el, msg) => { el.textContent = msg || el.textContent; el.classList.add('show'); };
+  const hide = el => el.classList.remove('show');
+
+  /* ── Password toggle ── */
+  document.querySelectorAll('.toggle-pw').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const inp = $(btn.dataset.target);
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+      btn.textContent = inp.type === 'password' ? '👁️' : '🙈';
+    });
+  });
+
+  /* ── Password strength ── */
+  const segments = ['s1','s2','s3','s4'];
+  const colors   = ['#e74c3c','#e67e22','#f1c40f','#27ae60'];
+  const labels   = ['Weak','Fair','Good','Strong'];
+
+  function checkStrength(pw) {
+    let score = 0;
+    if (pw.length >= 8)                      score++;
+    if (/[A-Z]/.test(pw))                   score++;
+    if (/[0-9]/.test(pw))                   score++;
+    if (/[^A-Za-z0-9]/.test(pw))            score++;
+    return score;
+  }
+
+  $('password').addEventListener('input', function () {
+    const score = checkStrength(this.value);
+    segments.forEach((id, i) => {
+      $(id).style.background = i < score ? colors[score - 1] : 'rgba(255,255,255,0.12)';
+    });
+    $('strengthLabel').textContent = this.value ? labels[score - 1] || '' : '';
+    $('strengthLabel').style.color = score > 0 ? colors[score - 1] : 'rgba(255,255,255,0.45)';
+  });
+
+  /* ── Validation ── */
+  function validateUsername(val) {
+    return /^[a-zA-Z0-9_.]{3,30}$/.test(val);
+  }
+  function validateEmail(val) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  }
+
+  /* ── Submit ── */
+  $('registerForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    let valid = true;
+
+    const username = $('username').value.trim();
+    const email    = $('email').value.trim();
+    const password = $('password').value;
+    const confirm  = $('confirmPassword').value;
+
+    // Username
+    if (!validateUsername(username)) {
+      show($('usernameErr'));
+      valid = false;
+    } else {
+      hide($('usernameErr'));
+    }
+
+    // Email
+    if (!validateEmail(email)) {
+      show($('emailErr'));
+      valid = false;
+    } else {
+      hide($('emailErr'));
+    }
+
+    // Password
+    if (password.length < 8) {
+      show($('passwordErr'));
+      valid = false;
+    } else {
+      hide($('passwordErr'));
+    }
+
+    // Confirm password
+    if (password !== confirm || confirm === '') {
+      show($('confirmErr'));
+      valid = false;
+    } else {
+      hide($('confirmErr'));
+    }
+
+    if (!valid) return;
+
+    /* ── Success ── */
+    const toast = $('toast');
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 3000);
+
+    // TODO: replace with your actual API call, e.g.:
+    // fetch('/api/register', { method: 'POST', body: JSON.stringify({ username, email, password }) })
+    console.log('Registered:', { username, email });
+    this.reset();
+    segments.forEach(id => $(id).style.background = 'rgba(255,255,255,0.12)');
+    $('strengthLabel').textContent = '';
+  });
+</script>
+
+</body>
+</html>
